@@ -1,35 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import Layout from "@/layouts/layout";
+import { lazy, Suspense } from "react";
+import { renderRoutes } from "@/routes/render";
+import { routesConfig } from "@/routes/config";
+import { Route, Routes } from "react-router-dom";
+
+const Layout = lazy(() => import("@/layouts/layout"));
+const NotFound = lazy(() => import("@/pages/notFound/index"));
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route element={<Layout />}>{renderRoutes(routesConfig)}</Route>
+      </Routes>
+    </Suspense>
+  );
 }
 
-export default App
+export default App;
